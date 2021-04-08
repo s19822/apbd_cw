@@ -14,72 +14,68 @@ namespace FirstApi.Controllers
     public class StudentsController : ControllerBase
     {
         private readonly IDbService _dbService;
-
+        public List<Student> studentsList = new List<Student>();
+        public List<string> dataList = new List<string>();
 
         public StudentsController(IDbService dbService)
         {
             _dbService = dbService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetStudents()
+        [NonAction]
+        public void ReadStudents()
         {
-            var list = new List<Student>();
-            List<string> listA = new List<string>();
-            List<Student> studentsList = new List<Student>();
             using (var reader = new StreamReader(@"C:\Users\Dzejki\Desktop\abc.csv"))
             {
-                
+
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
                     var values = line.Split(',');
 
-                    listA.Add(values[0]);
-                    Student student = null;
+                    dataList.Add(values[0]);
 
-                    student.
-                    
+                    studentsList.Add(new Student
+                    {
+                        FirstName = values[0],
+                        LastName = values[1],
+                        StudentNumber = values[2],
+                        BirthDate = values[3],
+                        DegreeCourse = values[4],
+                        ModeCourse = values[5],
+                        EmailAddress = values[6],
+                        FatherName = values[7],
+                        MotherName = values[8]
+                    });
+
                 }
-            }
 
-            return Ok(listA);
+
+            }
+        } 
+
+        [HttpGet]
+        public async Task<IActionResult> GetStudents()
+        {
+            ReadStudents();
+
+            return Ok(studentsList);
         }
 
-        [HttpGet("{idStudent}")]
-        public async Task<IActionResult> GetStudentById([FromRoute] int idStudent)
+        [HttpGet("{studentNumber}")]
+        public async Task<IActionResult> GetStudentByStudentNumber([FromRoute] string studentNumber)
         {
-            var list = new List<Student>();
-
-            list.Add(new Student
-            {
-                IdStudent = 1,
-                FirstName = "Jakub",
-                LastName = "Stanuszek"
-            });
-
-            list.Add(new Student
-            {
-                IdStudent = 2,
-                FirstName = "Tomasz",
-                LastName = "Stanuszek"
-            });
-
-            list.Add(new Student
-            {
-                IdStudent = 3,
-                FirstName = "Dzejki",
-                LastName = "Krol"
-            });
-
             Student student = null;
 
-            foreach(var studentFromList in list)
+            ReadStudents();
+
+            foreach (var studentFromList in studentsList)
             {
-                if(studentFromList.IdStudent == idStudent)
+                if (studentFromList.StudentNumber == studentNumber)
                 {
-                    student = studentFromList; 
+                    student = studentFromList;
                 }
+
             }
 
             return Ok(student);
