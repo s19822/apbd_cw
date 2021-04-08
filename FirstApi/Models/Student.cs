@@ -3,9 +3,14 @@ namespace FirstApi.Models
 {
     public class Student
     { 
-        public int IdStudent { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string 
+
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
 
     }
 }

@@ -3,6 +3,7 @@ using FirstApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,33 +22,28 @@ namespace FirstApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetStudents(string sort)
+        public async Task<IActionResult> GetStudents()
         {
             var list = new List<Student>();
-
-            list.Add(new Student
+            List<string> listA = new List<string>();
+            List<Student> studentsList = new List<Student>();
+            using (var reader = new StreamReader(@"C:\Users\Dzejki\Desktop\abc.csv"))
             {
-                IdStudent = 1,
-                FirstName = "Jakub",
-                LastName = "Stanuszek"
-            });
+                
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(',');
 
-            list.Add(new Student
-            {
-                IdStudent = 2,
-                FirstName = "Tomasz",
-                LastName = "Stanuszek"
-            });
+                    listA.Add(values[0]);
+                    Student student = null;
 
-            list.Add(new Student
-            {
-                IdStudent = 3,
-                FirstName = "Dzejki",
-                LastName = "Krol"
-            });
+                    student.
+                    
+                }
+            }
 
-
-            return Ok(list);
+            return Ok(listA);
         }
 
         [HttpGet("{idStudent}")]
